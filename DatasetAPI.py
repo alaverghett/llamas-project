@@ -1,4 +1,5 @@
 import ijson
+import json
 import time
 
 
@@ -9,7 +10,7 @@ class Dataset():
         Expects a dataset directory with yelp_business_new.json and yelp_review_new.json
         '''
         BUSINESS_DATASET_NEW = "dataset/yelp_business_new.json"
-        REVIEW_DATASET_NEW = "dataset/yelp_review_new.json"
+        REVIEW_DATASET_NEW = "dataset/yelp_review_minified.json"
         self.business_file = open(BUSINESS_DATASET_NEW)
         self.review_file = open(REVIEW_DATASET_NEW)
 
@@ -18,6 +19,13 @@ class Dataset():
 
     def get_reviews(self, business_id):
         return (review for review in ijson.items(self.review_file, 'item') if review['business_id'] == business_id)
+
+    def get_reviews_std(self, business_id):
+        '''
+        Returns a list
+        '''
+        reviews = json.load(self.review_file)
+        return [review for review in reviews if review['business_id'] == business_id]
 
 
 if __name__ == '__main__':
@@ -30,7 +38,8 @@ if __name__ == '__main__':
 
     start = time.time()
     end = None
-    for review in i.get_reviews(j):
+    print("before")
+    for review in i.get_reviews_std(j):
         end = time.time()
         print(review)
         print("Time = " + str(end - start) + " seconds")
