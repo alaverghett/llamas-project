@@ -18,14 +18,24 @@ class Dataset():
         return (business['business_id'] for business in ijson.items(self.business_file, 'item'))
 
     def get_reviews(self, business_id):
+        '''
+        Returns generator
+        Slower in traversal
+        '''
         return (review for review in ijson.items(self.review_file, 'item') if review['business_id'] == business_id)
 
     def get_reviews_std(self, business_id):
         '''
         Returns a list
+        Uses standard json module
+        Big overhead to load data
         '''
+
+        print("Loading")
         reviews = json.load(self.review_file)
-        return [review for review in reviews if review['business_id'] == business_id]
+        out = [review for review in reviews if review['business_id'] == business_id]
+        print("Loaded")
+        return out
 
 
 if __name__ == '__main__':
@@ -38,7 +48,6 @@ if __name__ == '__main__':
 
     start = time.time()
     end = None
-    print("before")
     for review in i.get_reviews_std(j):
         end = time.time()
         print(review)
