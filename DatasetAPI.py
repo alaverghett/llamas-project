@@ -11,11 +11,29 @@ class Dataset():
         '''
         BUSINESS_DATASET_NEW = "dataset/yelp_business_new.json"
         REVIEW_DATASET_NEW = "dataset/yelp_review_minified.json"
-        self.business_file = open(BUSINESS_DATASET_NEW)
+        self.BUSINESS_DATASET = "./dataset/yelp_academic_dataset_business.json"
+        self.business_file = open(self.BUSINESS_DATASET)
         self.review_file = open(REVIEW_DATASET_NEW)
 
     def get_business_ids(self):
-        return (business['business_id'] for business in ijson.items(self.business_file, 'item'))
+        return (json.loads(business)['business_id'] for business in self.business_file)
+        # return (business['business_id'] for business in ijson.items(self.business_file, 'item'))
+
+    def get_business(self, id):
+        # i = json.load(self.business_file)
+        # i = ijson.items(self.business_file, 'item')
+        # for b in i:
+        #     print(b)
+        #     input()
+
+        for js in open(self.BUSINESS_DATASET):
+            business = json.loads(js)
+            if business['business_id'] == id:
+                return business
+        # for business in ijson.items(self.business_file, 'item'):
+        #     print(business)
+        #     if business['business_id'] == id:
+        #         return business
 
     def get_reviews(self, business_id):
         '''
